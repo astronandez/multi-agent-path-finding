@@ -1,0 +1,4 @@
+{
+    "environments": ["configs/IntersectionEnv/env_stochastic.json"],
+    "agents": ["configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json", "configs/IntersectionEnv/agents/DQNAgent/baseline.json"]
+}
