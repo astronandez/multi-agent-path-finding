@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python Debugger: Current File with Arguments",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "./rl-agents/scripts/",
+            "program": "experiments.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "evaluate",
+                "configs/IntersectionEnv/env_stochastic.json",
+                "configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json",
+                "--train",
+                "--episodes=200",
+                "--no-display",
+                "--name-from-config",
+            ],
+            
+        }
+    ]
+}
+//  train
+//  python experiments.py evaluate configs/IntersectionEnv/env_stochastic.json configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json --train --no-display --name-from-config --processes 4 --episodes=50
+
+//  test
+//  python experiments.py evaluate configs/IntersectionEnv/env_stochastic.json configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json --test --episodes=50 --recover
+
+//  benchmark-train
+//  python experiments.py benchmark benchmark_config.json --train --no-display --name-from-config --processes 7  --episodes=10000
