@@ -1,5 +1,5 @@
-# Outputs
-baseline/rl-agents/scripts/out/
+# checkpoint-
+checkpoint-*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

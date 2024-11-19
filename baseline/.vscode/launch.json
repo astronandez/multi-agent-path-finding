@@ -15,12 +15,13 @@
             "justMyCode": false,
             "args": [
                 "evaluate",
-                "configs/IntersectionEnv/env_stochastic.json",
+                "configs/IntersectionEnv/env_multi_agent.json",
                 "configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json",
-                "--train",
+                "--test",
                 "--episodes=200",
-                "--no-display",
+                // "--no-display",
                 "--name-from-config",
+                "--recover"
             ],
             
         }
@@ -34,3 +35,9 @@
 
 //  benchmark-train
 //  python experiments.py benchmark benchmark_config.json --train --no-display --name-from-config --processes 7  --episodes=10000
+
+//  multi-agent train
+//  python experiments.py evaluate configs/IntersectionEnv/env_multi_agent.json configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json --train --no-display --name-from-config --processes 4 --episodes=50
+
+//  multi-agent test
+//  python experiments.py evaluate configs/IntersectionEnv/env_multi_agent.json configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json --test --episodes=50 --recover
