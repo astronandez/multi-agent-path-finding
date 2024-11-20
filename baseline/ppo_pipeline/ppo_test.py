@@ -9,7 +9,7 @@ with open("config.json", "r") as f:
 env = gymnasium.make("intersection-v0", render_mode='rgb_array', config=config)
 
 # load model
-model_path = "highway_ppo/model"
+model_path = "intersection_ppo/model"
 try:
     model = PPO.load(model_path, env=env)
     print("Model loaded successfully.")

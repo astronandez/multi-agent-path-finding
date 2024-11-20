@@ -1,0 +1,14 @@
+{
+    "observation": {
+      "type": "LidarObservation",
+      "cells": 32
+    },
+    "controlled_vehicles": 1,
+    "vehicles_count": 5,
+    "destination": null,
+    "high_speed_reward": 0.7,
+    "collision_reward": -15,
+    "initial_vehicle_count": 5,
+    "spawn_probability": 0.6
+  }
+  

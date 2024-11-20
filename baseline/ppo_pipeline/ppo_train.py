@@ -9,7 +9,7 @@ with open("config.json", "r") as f:
 env = gymnasium.make("intersection-v0", render_mode='rgb_array', config=config)
 
 # load model
-model_path = "highway_ppo/model"
+model_path = "intersection_ppo/model"
 try:
     model = PPO.load(model_path, env=env)
     print("Model loaded successfully.")
@@ -26,7 +26,7 @@ except FileNotFoundError:
                 clip_range=0.2,
                 ent_coef=0.01,
                 verbose=1,
-                tensorboard_log="highway_ppo/experiment1/")
+                tensorboard_log="intersection_ppo/experiment1/")
     
 # train model
 model.learn(int(1e4))
