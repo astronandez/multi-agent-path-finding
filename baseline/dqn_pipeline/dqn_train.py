@@ -2,6 +2,7 @@ import gymnasium
 import json
 import highway_env
 from stable_baselines3 import DQN
+from attention_policy import AttentionFeatureExtractor
 
 # Load environment configuration from a JSON file
 with open("config.json", "r") as f:
@@ -20,10 +21,18 @@ try:
 except FileNotFoundError:
     # If no pre-trained model is found, create a new one
     print("No pre-existing model found. Creating a new model.")
+
+    policy_kwargs = dict(
+        features_extractor_class=AttentionFeatureExtractor,
+        features_extractor_kwargs=dict(features_dim=128),
+    )
+
+    #policy_kwargs=dict(net_arch=[256, 256]) #for when you are running the mlp dqn without attention
+
     model = DQN(
         'MlpPolicy',  # Use a multi-layer perceptron policy
         env,  # The environment to train on
-        policy_kwargs=dict(net_arch=[256, 256]),            # Define the neural network architecture
+        policy_kwargs=policy_kwargs,            # Define the neural network architecture
         learning_rate=1e-3,                                 # Learning rate for the optimizer
         buffer_size=50000,                                  # Size of the replay buffer
         learning_starts=1000,                               # Number of steps before training starts
