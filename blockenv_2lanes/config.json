@@ -1,0 +1,14 @@
+{
+    "observation": {
+        "type": "LidarObservation",
+        "cells": 32,
+        "maximum_range": 40
+        },
+        
+    "simulation_frequency": 30,
+    "rendering_frequency": 30,
+    "destination": "o1",
+    "controlled_vehicles": 1,
+    "spawn_probability": 0,
+    "initial_vehicle_count": 0
+}
