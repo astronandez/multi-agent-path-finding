@@ -29,6 +29,8 @@ from multiprocessing.pool import Pool
 import gymnasium
 from highway_env.vehicle.objects import Obstacle
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 
 
@@ -68,11 +70,12 @@ class CustomIntersectionEnv(gymnasium.Wrapper):
                     },
                     "absolute": True,
                     "order": "shuffled"
-                }
+                },
+                "include_obstacles": True
             },
-            "initial_vehicle_count": 0,
-            "controlled_vehicles": 4,
-            "spawn_probability": -1,
+            "initial_vehicle_count": 3,
+            "controlled_vehicles": 3,
+            "spawn_probability": 0.3,
             "destination": None,
             "collision_reward": -10
         }
@@ -143,6 +146,7 @@ def evaluate(environment_config, agent_config, options):
     # env = load_environment(environment_config)
     
     env = CustomIntersectionEnv({"collision_position_range": [(-5, 5), (-5, 1)],})
+    env.reset()
     agent = load_agent(agent_config, env)
     run_directory = None
     if options['--name-from-config']:
