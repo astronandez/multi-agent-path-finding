@@ -1,0 +1,15 @@
+{
+    "observation": {
+      "type": "MultiAgentObservation",
+      "observation_config": {
+        "type": "LidarObservation",
+        "cells": 32
+      }
+    },
+    "vehicles_count": 5,
+    "controlled_vehicles": 3,
+    "initial_vehicle_count": 0,
+    "destination": null,
+    "spawn_probability": 0
+  }
+  

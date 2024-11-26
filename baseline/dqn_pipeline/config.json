@@ -1,8 +1,5 @@
 {
-    "observation": {
-      "type": "LidarObservation",
-      "cells": 32
-    },
+
     "controlled_vehicles": 1,
     "vehicles_count": 5,
     "destination": null,

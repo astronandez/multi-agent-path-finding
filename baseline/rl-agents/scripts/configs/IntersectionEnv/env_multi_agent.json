@@ -17,8 +17,8 @@
             "order": "shuffled"
         }
     },
-    "initial_vehicle_count": 2,
-    "controlled_vehicles": 2,
+    "initial_vehicle_count": 0,
+    "controlled_vehicles": 4,
     "spawn_probability": -1,
     "destination": null,
     "collision_reward": -10

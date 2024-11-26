@@ -17,11 +17,11 @@
                 "evaluate",
                 "configs/IntersectionEnv/env_multi_agent.json",
                 "configs/IntersectionEnv/agents/DQNAgent/ego_attention_8h.json",
-                "--test",
+                "--train",
                 "--episodes=200",
                 // "--no-display",
                 "--name-from-config",
-                "--recover"
+                // "--recover"
             ],
             
         }

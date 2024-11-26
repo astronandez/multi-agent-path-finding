@@ -26,12 +26,10 @@ import json
 from docopt import docopt
 from itertools import product
 from multiprocessing.pool import Pool
-import torch
-def custom_repr(self):
-    return f'{{Tensor:{tuple(self.shape)}}} {original_repr(self)}'
+import gymnasium
+from highway_env.vehicle.objects import Obstacle
+import numpy as np
 
-original_repr = torch.Tensor.__repr__
-torch.Tensor.__repr__ = custom_repr
 
 
 from rl_agents.trainer import logger
@@ -41,6 +39,85 @@ from rl_agents.agents.common.factory import load_agent, load_environment
 BENCHMARK_FILE = 'benchmark_summary'
 LOGGING_CONFIG = 'configs/logging.json'
 VERBOSE_CONFIG = 'configs/verbose.json'
+
+class CustomIntersectionEnv(gymnasium.Wrapper):
+    def __init__(self, env_config=None):
+        env = gymnasium.make('my_env-v0', render_mode='rgb_array')
+
+        config = {
+            "action": {
+                "type": "MultiAgentAction",
+                "action_config": {
+                    "type": "DiscreteMetaAction",
+                    "lateral": True,
+                    "longitudinal": True,
+                    "target_speeds": [0, 4.5, 9]
+                },
+            },
+            "observation": {
+                "type": "MultiAgentObservation",
+                "observation_config": {
+                    "type": "Kinematics",
+                    "vehicles_count": 5,
+                    "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
+                    "features_range": {
+                        "x": [-100, 100],
+                        "y": [-100, 100],
+                        "vx": [-20, 20],
+                        "vy": [-20, 20]
+                    },
+                    "absolute": True,
+                    "order": "shuffled"
+                }
+            },
+            "initial_vehicle_count": 0,
+            "controlled_vehicles": 4,
+            "spawn_probability": -1,
+            "destination": None,
+            "collision_reward": -10
+        }
+
+        env.configure(config)
+        super().__init__(env)
+        self.env_config = env_config or {
+            "collision_position_range": [(-5, -5), (5, 5)],  # Randomization range (x, y)
+        }
+
+    def reset(self, *, seed=None, options=None):
+        """Reset the environment with support for seed and options parameters.
+        
+        Args:
+            seed (int, optional): The seed for random number generation
+            options (dict, optional): Additional options for reset
+            
+        Returns:
+            tuple: (observation, info dictionary)
+        """
+        # If seed is provided, set it
+        if seed is not None:
+            np.random.seed(seed)
+            
+        # Reset the underlying environment
+        obs, info = self.env.reset(seed=seed, options=options)
+        
+        # Clear existing obstacles
+        self.env.road.objects.clear()
+        
+        # Add collision (static vehicles)
+        collision_pos = self._randomize_collision_position()
+        for offset in [(-1, 0), (0, 0)]:  # Add two static vehicles around the collision
+            position = [collision_pos[0] + offset[0], collision_pos[1] + offset[1]]
+            obstacle = Obstacle(self.env.road, position)
+            self.env.road.objects.append(obstacle)
+
+        return obs, info
+
+    def _randomize_collision_position(self):
+        """Randomize collision positions within a specified range."""
+        x_range, y_range = self.env_config["collision_position_range"]
+        x = np.random.uniform(x_range[0], x_range[1])
+        y = np.random.uniform(y_range[0], y_range[1])
+        return x, y
 
 
 def main():
@@ -63,7 +140,9 @@ def evaluate(environment_config, agent_config, options):
     logger.configure(LOGGING_CONFIG)
     if options['--verbose']:
         logger.configure(VERBOSE_CONFIG)
-    env = load_environment(environment_config)
+    # env = load_environment(environment_config)
+    
+    env = CustomIntersectionEnv({"collision_position_range": [(-5, 5), (-5, 1)],})
     agent = load_agent(agent_config, env)
     run_directory = None
     if options['--name-from-config']:
